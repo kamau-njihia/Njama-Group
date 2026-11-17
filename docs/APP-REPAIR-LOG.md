@@ -131,3 +131,14 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 - BMA remains subject to the database-provisioning support response.
 - The NJAMA GROUP parent app exists as a separate deployment, but subsidiary apps are not connected to it. Any 18 November integration should start with permission-aware links and verified read-only status surfaces. Do not share databases, credentials or user records across apps as a shortcut.
 - No PRs have been merged, no user databases reset or migrated, and no cross-app data connection has been made.
+
+
+## 2026-11-17 — PropertyOS accounting and edit follow-up
+
+- Expanded PropertyOS cursor pagination to the accounting registers: chart of accounts, journal entries, journal lines, bank statement rows, payment approvals and the finance transactions used for bank matching. Each page is bounded to 100 rows; the UI merges by record ID and identifies totals/counts as based on loaded records until the remaining pages are loaded.
+- Completed the People & Services / Planning & Compliance pagination UI and backend. The separate Finance register also uses this paginated component.
+- Added safe field editing for existing People & Services, Finance, Compliance, Planning and Projects records. Field allowlists, validation, role checks, organisation-scoped property references and optimistic concurrency are enforced server-side. This addresses the reported inability to change an existing supplier/contractor record such as Kent Consultants, provided the record is in the organisation's People & Services register and the user has an authorised role.
+- Made inspection category required in the UI to match the backend's required validation, preventing a blank category from causing a 400 response when the user pastes an observation.
+- Added an AI 502/503 report-generation fallback QA scenario. The existing backend fallback should preserve user notes and save a clearly marked draft when the AI provider is unavailable; database write failures still need live verification.
+- PropertyOS dependency validation: workflow #45 failed before TypeScript checks because npm requested unavailable `csstype@3.2.4`. The package was pinned to `csstype@3.2.3` and Rollup `4.68.4`. Workflow #47 then passed npm install, backend syntax validation, frontend type-check and build on the earlier source commit. Workflow #57 is now running on the expanded accounting-pagination source. Do not treat the latest PropertyOS branch as release-ready until #57 (or a later run for its final head) passes.
+- Current CI confirmation: Atira workflow #52 passed; FORGED workflow #30 passed; BMA workflow #108 passed. These are source validations, not live AppDeploy deployments.
