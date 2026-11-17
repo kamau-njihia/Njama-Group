@@ -10,7 +10,7 @@
 | Atira | `fix/atira-sync-acknowledgements` | [PR #1](https://github.com/kamau-njihia/Atira/pull/1) | Passed: TypeScript, 5 IndexedDB tests, Vite build | Browser/device sync QA; account-scoped restore and real backup testing |
 | FORGED | `recovery/appdeploy-v3-baseline` | [PR #1](https://github.com/kamau-njihia/Forged/pull/1) | Passed: frontend/backend TypeScript, Vite build | >100-record tests; AI context index; session recovery and backup |
 | PropertyOS | `recovery/appdeploy-v36-baseline` | [PR #1](https://github.com/kamau-njihia/Property-Os/pull/1) | Passed: frontend TypeScript, Vite build | Audit/repair fixed 100-row reads, especially tenant lookup and scheduled jobs |
-| BMA | `recovery/appdeploy-v23-candidate` | [PR #1](https://github.com/kamau-njihia/BMA/pull/1) | Passed: frontend/backend TypeScript, 4 lesson-validation tests, service-worker syntax and Vite build | Binary resource bytes still absent from GitHub recovery branch (live AppDeploy inventory lists the paths); learner accounts/progress; persistent AI abuse controls; performance and offline/device QA |
+| BMA | `recovery/appdeploy-v23-candidate` | [PR #1](https://github.com/kamau-njihia/BMA/pull/1) | Passed (#49): frontend/backend TypeScript, 4 lesson-validation tests, service-worker syntax and Vite build | Binary resource bytes still absent from GitHub recovery branch (live AppDeploy inventory lists the paths); learner accounts/progress; persistent AI abuse controls; performance and offline/device QA |
 | NJAMA GROUP | `foundation/group-architecture-charter` | [PR #1](https://github.com/kamau-njihia/Njama-Group/pull/1) | Documentation-only | Review group architecture charter and implementation gates |
 
 ## Important source and repair notes
