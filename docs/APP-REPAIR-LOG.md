@@ -163,3 +163,9 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 - PropertyOS still has first-page-only reads in automation, overview aggregates, tenant identity lookup and accounting summary paths. Generic register and accounting-register endpoints have cursor support, but this does not eliminate the remaining 100-record truncation risks. A robust cron/checkpoint design is still required before claiming large-portfolio readiness.
 - FORGED frontend and record API support cursor pagination, but its AI accountability/partner context still reads only the first 100 records. Stage a bounded, cursor-aware context fix and tests before release.
 - No deployment, PR merge, database migration, account reset, or cross-app data connection was performed by this continuation.
+
+
+### Additional staged repair commits — 17 November
+- Atira PR branch received commit `3721a37b5126bafe52452e5278ab236e2f8af9cf` to correct provider metadata for NSE market-group and watchlist responses. The Oanor quote adapter itself was already present in the recovery branch. This is GitHub source only; it is not live.
+- FORGED PR branch received commit `847d9bc9e7e362427ddc054daf0a5f9cca2482be`: the accountability partner now refuses to generate a report when the first 100-record read has a continuation token, rather than silently coaching from incomplete history or scanning an unbounded history on every AI request. A recent-activity summary/index remains the proper scale fix. This is GitHub source only; it is not live.
+- The latest observed FORGED PR head is `847d9bc9e7e362427ddc054daf0a5f9cca2482be`. A workflow result for this commit was not available through the current PR-only workflow-run lookup; do not describe this commit as CI-passed until its GitHub Actions run is checked.
