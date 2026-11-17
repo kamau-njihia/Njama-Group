@@ -145,3 +145,21 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 
 ### PropertyOS final validation update
 - Workflow #57 completed successfully on the latest audited PropertyOS source commit `a2d1b90ae6193d96985af29c39d2cb46593074b4`: npm install, backend syntax validation, TypeScript type-check and production build all passed. This covers the register editing, inspection category validation, accounting cursor pagination and dependency pins described above.
+
+
+## 2026-11-17 continuation — NSE provider and pre-integration checks
+
+### Atira / Oanor NSE provider
+- The Atira recovery PR branch `fix/atira-sync-acknowledgements` contains a server-only Oanor NSE quote adapter using the AppDeploy secret `OANOR_API_KEY`, batched NSE tickers (up to 20 per request), 30-minute in-process quote caching, KES normalization, source/timestamp metadata, and an explicit unavailable result rather than fabricated prices.
+- Commit `3721a37b5126bafe52452e5278ab236e2f8af9cf` corrects the market-group and watchlist response provider labels so they no longer incorrectly report Yahoo Finance for NSE data. CI run 54 was observed in progress at the time of this update.
+- A secure AppDeploy secret-entry record was created for existing app `greenledger-xfj1js`; it is pending user entry. No key value is visible to ChatGPT and no secret has been bound or deployed yet.
+- **Provider quota correction:** current Oanor NSE API marketplace documentation advertises 10 free test calls per day and presents paid plans for production usage; the previously reported 7,500 free monthly production calls could not be verified on the current official page. Do not promise or enable paid usage. Keep the integration limited to the free test allowance unless the provider confirms a larger free production allowance in writing. Handle 401/402/429 and provider failures as unavailable data, never as a zero price or stale live quote.
+- NSE historical charts and NSE symbol search still use the existing Yahoo endpoints and may fail for Kenyan tickers; do not represent Oanor's quote endpoint as providing historical prices unless its documented endpoint supports that.
+
+### Cross-app release readiness
+- Latest live status checks: PropertyOS, Atira and FORGED remain `ready` with no frontend/backend errors in their latest QA snapshots. BMA remains on snapshot `1793425368735`; its known live logo-resource error is still present because the corrected inline-SVG source has not been deployed.
+- The AppDeploy deployment preflight returned `CREDITS_USAGE_LIMIT_REACHED`: daily Free allowance has fewer than 16 of 100 credits remaining. New deployments are paused until `2026-11-18T00:00:00Z` (03:00 Africa/Nairobi). Do not retry before reset. Existing deployed apps retain their remaining monthly balance.
+- BMA's recovery branch contains authenticated progress API candidates and validation tests, but production writes remain blocked pending AppDeploy's supported database table-catalog provisioning instructions. Do not guess a provisioning endpoint or migrate local learner progress.
+- PropertyOS still has first-page-only reads in automation, overview aggregates, tenant identity lookup and accounting summary paths. Generic register and accounting-register endpoints have cursor support, but this does not eliminate the remaining 100-record truncation risks. A robust cron/checkpoint design is still required before claiming large-portfolio readiness.
+- FORGED frontend and record API support cursor pagination, but its AI accountability/partner context still reads only the first 100 records. Stage a bounded, cursor-aware context fix and tests before release.
+- No deployment, PR merge, database migration, account reset, or cross-app data connection was performed by this continuation.
