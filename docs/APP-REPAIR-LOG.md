@@ -93,3 +93,41 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 4. Check AppDeploy status, validation, frontend/backend/network errors and GitHub CI on the exact current PR head.
 5. Run authenticated workflow tests with existing data and preserve rollback capability.
 6. Do not merge recovery PRs, migrate data, provision undocumented tables or connect external providers without the necessary evidence and owner approval.
+
+
+## 2026-11-17 — second technical audit and integration preparation
+
+### New source changes staged
+
+**PropertyOS** — latest source commit `ae3af0e7d4b0c005c89aba82eb3080b8fa83ed04`; workflow #41 is pending.
+- Found the device-lock overlay had been explicitly disabled with a `false &&` condition. Re-enabled the lock and added a checking state; the opening animation is layered above it so the animation finishes before PIN setup/unlock is requested.
+- Added cursor-based pagination (maximum 100 rows per request) to the organisation module registers for finance, people, compliance, planning and projects. The UI now loads further pages on demand, merges by record ID, and labels metrics as based on loaded records rather than claiming partial totals are whole-register totals.
+- Added controlled edits for existing register records, including people/supplier/contractor entries. The backend uses module-specific field allowlists, role checks, field validation, organisation-scoped property checks and optimistic concurrency on status/updatedAt. This should allow an authorised manager to edit an existing supplier such as Kent Consultants without changing its record ID.
+- Made inspection category explicitly required in the UI to match backend validation. Pasted observations remain limited to 10,000 characters and are saved as inspection observations.
+- Added regression scenarios for lock enforcement, >100-row registers, existing-record editing, Need a Hand guidance and inspection paste validation.
+- Still outstanding: summary/dashboard registers, report source-register reads and scheduled automation still use bounded first-page reads. Scheduled jobs need checkpointed incremental processing; do not solve this by draining all pages in one cron invocation. Report generation can fall back when the AI service returns 5xx, but database write/provisioning failures still require live verification.
+
+**Atira** — latest source commit `7399fdb449490cfe6f49b0146522de016826ec1c`; workflow #52 passed.
+- Staged Oanor NSE quote integration using backend secret access only, up to 20 symbols per request, sequential spacing, a 30-minute per-ticker cache and explicit unavailable states. The secure `OANOR_API_KEY` entry is pending owner submission. No key value has been stored yet, and the integration is not live.
+- Corrected dashboard and intelligence savings rate to use income minus expenses minus investments.
+- Corrected dashboard gain/loss to use total current portfolio value minus total invested capital, not the selected month's contributions.
+- Changed the forecast's suggested monthly contribution default to KES 12,000 (this does not alter any saved transaction).
+- Added regression tests for savings, portfolio gain/loss and net worth.
+
+**FORGED** — latest source commit `62d96253b8c1d4f929d194fd7678f32847a5337e`; workflow #30 passed.
+- Connected the existing backend cursor pagination to the frontend. Users can load older records in pages of 100; page merges are deduplicated by record ID.
+- Added a QA scenario for accounts with more than 200 records and user isolation.
+- Still outstanding: partner/coach AI context needs a durable user-scoped summary/index rather than a first-100-record context read.
+
+**BMA** — latest source commit `583039660aa2155d1d30a7b157f0934968d173f8`; workflow #108 passed.
+- Removed illustrative learner names, sample cohort metrics and sample community activity from Enterprise Academy and Community. These areas now show honest empty states until verified accounts and real records are connected.
+- Added a regression scenario to prevent sample records being presented as live activity.
+- Authentication and cloud learner-progress sync remain blocked on the supported database-table provisioning procedure. The earlier support request is still the required dependency; do not invent a table-provisioning endpoint or deploy cloud writes until support confirms the supported method.
+
+### Release gate for 18 November 2026
+- AppDeploy reported fewer than 16 of 100 daily credits remaining; deployment requires at least 16. Daily reset is `2026-11-18T00:00:00Z` (03:00 Nairobi time). Recheck account quota before deploying; do not retry before the reset.
+- PropertyOS workflow #41 must pass before its new source changes are considered release-ready.
+- Atira, FORGED and BMA latest workflows have passed. Atira's live Oanor test still requires the owner to submit the API key through the secure AppDeploy entry and a live quote check after deployment.
+- BMA remains subject to the database-provisioning support response.
+- The NJAMA GROUP parent app exists as a separate deployment, but subsidiary apps are not connected to it. Any 18 November integration should start with permission-aware links and verified read-only status surfaces. Do not share databases, credentials or user records across apps as a shortcut.
+- No PRs have been merged, no user databases reset or migrated, and no cross-app data connection has been made.
