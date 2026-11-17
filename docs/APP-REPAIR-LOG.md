@@ -30,7 +30,7 @@ These deployments did not reset accounts, delete data, migrate databases or conn
 - Source branch: `fix/atira-sync-acknowledgements`.
 - PR: https://github.com/kamau-njihia/Atira/pull/1
 - GitHub workflow #40 passed backend syntax, frontend type-check, IndexedDB backup-import tests, PWA validation and production build.
-- Oanor NSE integration is now staged on the same PR branch in commit `05ad4c3a50b06593debd78db05fc20ba1e452d48`: backend-only secret access, documented `/v1/quote` response parsing, maximum 20 tickers/request, sequential batch spacing, per-ticker 30-minute cache, and explicit unavailable states instead of fabricated prices. The secure `OANOR_API_KEY` entry has been created for Atira but is still awaiting the owner to submit the key. This commit has not yet passed a new CI run or been deployed.
+- Oanor NSE integration is now staged on the same PR branch in commit `05ad4c3a50b06593debd78db05fc20ba1e452d48`: backend-only secret access, documented `/v1/quote` response parsing, maximum 20 tickers/request, sequential batch spacing, per-ticker 60-minute cache, and explicit unavailable states instead of fabricated prices. The secure `OANOR_API_KEY` entry has been created for Atira but is still awaiting the owner to submit the key. This commit has not yet passed a new CI run or been deployed.
 
 ### FORGED
 - Removed five unused icon imports that failed strict TypeScript checking.
@@ -108,7 +108,7 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 - Still outstanding: summary/dashboard registers, report source-register reads and scheduled automation still use bounded first-page reads. Scheduled jobs need checkpointed incremental processing; do not solve this by draining all pages in one cron invocation. Report generation can fall back when the AI service returns 5xx, but database write/provisioning failures still require live verification.
 
 **Atira** — latest source commit `7399fdb449490cfe6f49b0146522de016826ec1c`; workflow #52 passed.
-- Staged Oanor NSE quote integration using backend secret access only, up to 20 symbols per request, sequential spacing, a 30-minute per-ticker cache and explicit unavailable states. The secure `OANOR_API_KEY` entry is pending owner submission. No key value has been stored yet, and the integration is not live.
+- Staged Oanor NSE quote integration using backend secret access only, up to 20 symbols per request, sequential spacing, a 60-minute per-ticker cache and explicit unavailable states. The secure `OANOR_API_KEY` entry is pending owner submission. No key value has been stored yet, and the integration is not live.
 - Corrected dashboard and intelligence savings rate to use income minus expenses minus investments.
 - Corrected dashboard gain/loss to use total current portfolio value minus total invested capital, not the selected month's contributions.
 - Changed the forecast's suggested monthly contribution default to KES 12,000 (this does not alter any saved transaction).
@@ -150,10 +150,10 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 ## 2026-11-17 continuation — NSE provider and pre-integration checks
 
 ### Atira / Oanor NSE provider
-- The Atira recovery PR branch `fix/atira-sync-acknowledgements` contains a server-only Oanor NSE quote adapter using the AppDeploy secret `OANOR_API_KEY`, batched NSE tickers (up to 20 per request), 30-minute in-process quote caching, KES normalization, source/timestamp metadata, and an explicit unavailable result rather than fabricated prices.
+- The Atira recovery PR branch `fix/atira-sync-acknowledgements` contains a server-only Oanor NSE quote adapter using the AppDeploy secret `OANOR_API_KEY`, batched NSE tickers (up to 20 per request), 60-minute in-process quote caching, KES normalization, source/timestamp metadata, and an explicit unavailable result rather than fabricated prices.
 - Commit `3721a37b5126bafe52452e5278ab236e2f8af9cf` corrects the market-group and watchlist response provider labels so they no longer incorrectly report Yahoo Finance for NSE data. GitHub Actions run #54 completed successfully: backend syntax, frontend type-check, IndexedDB backup-import tests, PWA validation and production build all passed.
 - A secure AppDeploy secret-entry record was created for existing app `greenledger-xfj1js`; it is pending user entry. No key value is visible to ChatGPT and no secret has been bound or deployed yet.
-- **Provider quota correction:** current Oanor NSE API marketplace documentation advertises 10 free test calls per day and presents paid plans for production usage; the previously reported 7,500 free monthly production calls could not be verified on the current official page. Do not promise or enable paid usage. Keep the integration limited to the free test allowance unless the provider confirms a larger free production allowance in writing. Handle 401/402/429 and provider failures as unavailable data, never as a zero price or stale live quote.
+- **Provider quota correction (supersedes the previous note):** Oanor's official NSE API pricing page lists a free API tier of 7,500 calls/month, 2 requests/second, no credit card and a hard 429 quota cap. Its page also advertises 10 free browser test calls/day, and one FAQ line conflicts with the plan table (100 calls/month / 1 request per second). Treat the plan table as the published free-tier offer but verify the actual account quota with a live test before release. Do not enable a paid plan. Handle 401/402/429 and provider failures as unavailable data, never as a zero price or stale live quote.
 - NSE historical charts and NSE symbol search still use the existing Yahoo endpoints and may fail for Kenyan tickers; do not represent Oanor's quote endpoint as providing historical prices unless its documented endpoint supports that.
 
 ### Cross-app release readiness
@@ -173,8 +173,7 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 
 ### Register pagination and provider-quota hardening — 17 November
 - PropertyOS PR branch now adds cursor-based “Load more records” to the remaining generic organisation register in `src/App.tsx`, matching the already paginated `PropertyOperations` register. Its page-level totals are relabelled as loaded counts to avoid presenting a first-page count as the organisation-wide total. Commit: `900c562009719e369bde86092c6d620732852890`. The current workflow lookup has not yet returned a CI result for this commit; keep it staged and unmerged until validated.
-- Atira Oanor warm-instance cache TTL was increased from 30 minutes to 8 hours to conserve the currently advertised 10 free test calls/day. Commit: `25397f80fde7fbefe8597c62303c8cf573c620c6`; GitHub Actions run #56 passed backend syntax, frontend type-check, IndexedDB tests, PWA validation and production build.
-- The 8-hour in-process cache is a conservative best effort, not a strict global daily quota: serverless cold starts can reset process memory. The provider itself must enforce its free test allowance; no paid plan is enabled or authorised.
+- Atira Oanor warm-instance cache was first raised to eight hours while the provider quota was being rechecked, then set to 60 minutes for a better freshness/free-tier balance in commit `9559c1b7103f8a9544411035db22ba2f10303512`. CI for this latest commit is still to be checked. The 60-minute cache is in-process, not a strict global quota: serverless cold starts can reset process memory. Oanor's hard free-tier cap remains the final safeguard; no paid plan is enabled or authorised.
 
 
 ### PropertyOS report and register hardening — 17 November
@@ -186,3 +185,8 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 
 ### Atira calculation audit — 17 November
 - Source review confirms the Atira recovery branch computes period savings as income minus expenses minus investment contributions; total return percentage as current investment value minus total invested capital, divided by invested capital; and net worth as manual assets plus current portfolio value minus liabilities. The explanatory copy explicitly states that portfolio value is counted once and contributions are not added again. This matches the approved calculation rules. This was a source review, not a live-account data reconciliation.
+
+
+### Oanor quota re-verification — 17 November
+- The official Oanor NSE API page at `oanor.dev/api/nairobi-stock-api` now lists a Free tier of 7,500 calls/month, 2 requests/second, no credit card and a hard quota cap. The same page separately advertises 10 free browser test calls/day and contains an inconsistent FAQ line stating 100 calls/month / 1 request per second. The release checklist therefore requires a live test of the actual free account quota before rollout; do not enable paid usage.
+- Atira's latest Oanor cache setting is 60 minutes in commit `9559c1b7103f8a9544411035db22ba2f10303512`. This supersedes the temporary 8-hour setting. The secret-entry form remains pending and no API key has been stored.
