@@ -182,3 +182,7 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 - PropertyOS management-report generation now falls back to a clearly labelled manual-review draft for any AI-provider error, including provider-side 4xx/429/5xx, after input, property and permission validation have succeeded. User-supplied observations are retained and source-register references are marked as needing verification. Commit `d6a608fafe2edcbf5e827c43d2063aa1b8f61367`.
 - These PropertyOS commits are staged on the existing recovery PR branch. GitHub Actions run #63 completed successfully: backend syntax, TypeScript check and production build all passed. The changes remain staged and unmerged.
 - The report builder, automation cron, overview aggregates and tenant email lookup still have first-page limits. The above fixes improve the generic register and report failure handling but do not remove all large-portfolio truncation risks.
+
+
+### Atira calculation audit — 17 November
+- Source review confirms the Atira recovery branch computes period savings as income minus expenses minus investment contributions; total return percentage as current investment value minus total invested capital, divided by invested capital; and net worth as manual assets plus current portfolio value minus liabilities. The explanatory copy explicitly states that portfolio value is counted once and contributions are not added again. This matches the approved calculation rules. This was a source review, not a live-account data reconciliation.
