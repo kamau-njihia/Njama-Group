@@ -35,7 +35,7 @@
 - v23 is the provisional source master after comparing the older offline-focused candidate; older app histories remain preserved.
 - Offline resource caching and failure-tolerant background pre-caching are implemented; public AI input/cache validation has been improved.
 - The PDF and two DOCX originals are verified in the user's Library; checksums are recorded in [the BMA resource manifest](https://github.com/kamau-njihia/BMA/blob/recovery/appdeploy-v23-candidate/docs/BMA-RESOURCE-MANIFEST.md).
-- The live resource inventory lists all three curriculum paths; the separate upload entry is redundant. The original binary bytes are still absent from GitHub, and offline opening remains unverified.
+- The live resource inventory lists all three curriculum paths; the separate upload entry is redundant. The original binary bytes are still absent from GitHub, and offline opening remains unverified; live-file hashes are not exposed by the resource inventory.
 
 ## Production safety gates
 
