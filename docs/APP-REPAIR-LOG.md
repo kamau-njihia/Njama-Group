@@ -30,6 +30,7 @@ These deployments did not reset accounts, delete data, migrate databases or conn
 - Source branch: `fix/atira-sync-acknowledgements`.
 - PR: https://github.com/kamau-njihia/Atira/pull/1
 - GitHub workflow #40 passed backend syntax, frontend type-check, IndexedDB backup-import tests, PWA validation and production build.
+- Oanor NSE integration is now staged on the same PR branch in commit `05ad4c3a50b06593debd78db05fc20ba1e452d48`: backend-only secret access, documented `/v1/quote` response parsing, maximum 20 tickers/request, sequential batch spacing, per-ticker 30-minute cache, and explicit unavailable states instead of fabricated prices. The secure `OANOR_API_KEY` entry has been created for Atira but is still awaiting the owner to submit the key. This commit has not yet passed a new CI run or been deployed.
 
 ### FORGED
 - Removed five unused icon imports that failed strict TypeScript checking.
@@ -55,7 +56,7 @@ These deployments did not reset accounts, delete data, migrate databases or conn
 
 ### Atira
 - NSE quote provider: Yahoo Finance requests for Kenyan listings are returning 404 in the app runtime. Do not fabricate prices or present stale data as live.
-- A possible NSE-specific provider is Oanor. Its published free tier advertises 7,500 calls/month and 2 requests/second, but a provider API key is required for production use. No key has been created, no paid subscription has been purchased and no provider has been connected. A bounded batch/cache integration requires explicit owner approval and a secret key.
+- Owner approval for Oanor has now been given. The integration code is staged in the Atira PR branch, but it is not live. The secure AppDeploy entry for `OANOR_API_KEY` is pending owner submission; the API key must never be pasted into chat or source code. Oanor's published free tier advertises 7,500 calls/month, 2 requests/second and a hard quota cap. No paid subscription is intended. Before release, confirm the secret is stored, run a live quote test, verify KES currency/timestamps and confirm missing symbols remain unavailable rather than being fabricated.
 - The newly prepared orphan-record reconciliation and Rollup pin have not yet been deployed to the live app.
 - The legacy client-ID lookup remains bounded to eight 500-record pages and fails closed if it cannot complete. A durable index/backfill is still needed for accounts exceeding that legacy scan window.
 - Confirm financial formula/data invariants and perform real offline, account-switching and backup-restore tests.
@@ -73,12 +74,16 @@ These deployments did not reset accounts, delete data, migrate databases or conn
 
 ## AppDeploy usage constraint
 
-The AppDeploy account is on the Free plan. The account query showed approximately `900.34` monthly credits remaining, but the next deployment was rejected by `CREDITS_USAGE_LIMIT_REACHED`. AppDeploy documents simultaneous daily, weekly and monthly limits; Free currently lists 100 daily, 400 weekly and 1,000 monthly credits. Daily quota resets at 00:00 UTC and weekly quota on Monday at 00:00 UTC. The exact exhausted period should be confirmed in the dashboard before another deployment. Do not retry deployments while the limit remains active.
+The AppDeploy account is on the Free plan. The account query showed approximately `900.34` monthly credits remaining, but AppDeploy confirmed that fewer than 16 of the 100 daily credits remain, below the 16-credit minimum for a deployment. New deployments are paused until `2026-11-18T00:00:00Z` (03:00 Nairobi time on 18 November). Free limits apply simultaneously: 100 daily, 400 weekly and 1,000 monthly. Do not retry before the reset; then re-check current quota before any deployment.
 
 Official references:
 - https://appdeploy.ai/faq
 - https://appdeploy.ai/mcp-docs
 - https://oanor.com/api/nairobi-stock-api
+
+## NJAMA GROUP integration position
+
+The NJAMA GROUP parent app is already present as a separate deployed AppDeploy app (`njama-group-4mpfw2`). It is not yet connected to the subsidiary apps or their databases. Tomorrow's integration must begin with permission-aware app links and verified read-only status surfaces; do not merge user data, share credentials or connect databases as a shortcut. Each subsidiary retains its own account boundary and source-of-truth database.
 
 ## Release policy
 
