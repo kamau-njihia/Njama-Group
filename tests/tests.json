@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Restore a signed-in group workspace",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "AppDeploy authentication restoration",
+      "protected group workspace",
+      "authenticated identity"
+    ],
+    "description": "Verifies an authenticated user can restore their session and reach the private NJAMA GROUP command centre.",
+    "steps": [
+      "Sign in to NJAMA GROUP using the test account",
+      "Wait for the group command centre to load",
+      "Confirm the signed-in workspace and navigation are visible"
+    ],
+    "expected": "The authenticated user sees the NJAMA GROUP command centre and no sign-in prompt."
+  },
+  {
+    "name": "Open an existing specialist application",
+    "viewport": "desktop",
+    "covers": [
+      "subsidiary directory",
+      "external specialist application link",
+      "independent app boundary"
+    ],
+    "description": "Verifies the businesses directory exposes the existing PropertyOS application as a separate destination.",
+    "steps": [
+      "Open Businesses from the group navigation",
+      "Find PropertyOS in the directory",
+      "Open the PropertyOS app link"
+    ],
+    "expected": "PropertyOS opens as its own application in a separate browser tab; NJAMA GROUP remains open."
+  },
+  {
+    "name": "Keep unconnected business modules clearly separated",
+    "viewport": "mobile",
+    "covers": [
+      "mobile navigation",
+      "unconnected module state",
+      "no fabricated live data"
+    ],
+    "description": "Verifies planned businesses are shown as not connected and do not display fabricated operational records.",
+    "steps": [
+      "Open NJAMA GROUP on a mobile viewport",
+      "Open Businesses from the navigation",
+      "Find Quick Task and Njama Creations"
+    ],
+    "expected": "Both businesses are shown as not linked yet, with no fabricated transactions, users or activity."
+  },
+  {
+    "name": "Sign out of the group workspace",
+    "viewport": "desktop",
+    "covers": ["sign-out", "protected workspace access"],
+    "description": "Verifies the user can end the authenticated session and return to the secure sign-in screen.",
+    "steps": [
+      "Sign in to NJAMA GROUP",
+      "Use the profile sign-out control",
+      "Confirm the sign-in screen is displayed"
+    ],
+    "expected": "The private workspace is no longer displayed and the secure sign-in screen appears."
+  }
+]
