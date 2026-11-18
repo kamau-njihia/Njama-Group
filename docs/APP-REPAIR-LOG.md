@@ -270,3 +270,16 @@ These platform QA results are not a substitute for end-to-end testing on physica
 - AppDeploy source snapshots were deployed independently; no draft GitHub PR was merged.
 - Existing account identities and data stores were preserved. No database reset, destructive migration, bulk data copy, shared credentials, cross-app database access or subsidiary live data connection was performed.
 - NJAMA GROUP integration remains read-only by default and disabled until target-side authentication, owner-approved purpose/fields, consent, revocation and audit checks are implemented and tested.
+
+
+## 2026-11-18 — follow-up pagination, source validation and quota checkpoint
+
+- **Latest AppDeploy snapshots rechecked:** NJAMA GROUP `1794972964162`; Atira `1794973288954`; PropertyOS `1794973161210`; FORGED `1794973265624`; BMA `1794972913892`. All five current deployments report `ready`.
+- **PropertyOS tenant portal:** added bounded cursor traversal for the People & Services tenant directory. It now finds tenant/lease profiles and their service requests beyond the first 100 records; if the directory exceeds the 10,000-record safety bound, it returns an explicit 503 rather than incorrectly reporting no tenancy profile. The daily operations cron remains enabled and its last recorded run was successful.
+- **FORGED reports:** added a visible `Load more saved history` action using the authenticated records cursor. It appends later pages with ID deduplication and updates loaded-record totals. The Partner still refuses to analyse a partial first-100 context; a durable summary/index is still required for complete long histories.
+- **FORGED strict source cleanup:** GitHub run #40 exposed five unused Lucide imports after the AppDeploy source was synced. They were removed from the GitHub recovery branch in commit `33c20f8e882748557870c9be01830d76aa56871c`; validation run #42 is currently in progress. The attempt to deploy this import-only cleanup to AppDeploy was rejected with `CREDITS_USAGE_LIMIT_REACHED`; the live snapshot remains `1794973265624`. Do not retry deployment while the usage limit is active.
+- **PropertyOS GitHub:** source and tests synced to the recovery branch. GitHub Actions run #70 passed.
+- **Atira GitHub:** source synced to the recovery branch. GitHub Actions run #61 passed. The Oanor secure secret entry remains `pending_value`; NSE data stays unavailable until the owner supplies the key through the secure form. No paid usage is authorised.
+- **BMA GitHub:** strict TypeScript issues were corrected and synced. GitHub Actions run #116 passed (type-check, lesson tests, service-worker syntax and production build). The live BMA app still has browser-local learner progress; the authenticated cloud progress candidate remains disabled pending supported table provisioning and frontend account/migration work.
+- **AppDeploy quota:** the platform explicitly returned `CREDITS_USAGE_LIMIT_REACHED` for the FORGED cleanup deployment. The response did not identify whether the daily, weekly or monthly limit was responsible. No further live deployments should be attempted until the credits dashboard confirms the relevant limit has reset or changed.
+- **No destructive or cross-app actions:** no PR was merged; no live user records were reset, migrated or copied; no subsidiary databases or credentials were connected to NJAMA GROUP.
