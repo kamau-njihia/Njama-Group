@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { auth, api } from '@appdeploy/client';
 import {
   Activity,
+  ArrowLeft,
+  ArrowRight,
   ArrowUpRight,
   Bell,
   Building2,
@@ -145,6 +147,67 @@ function App() {
   const [errorText, setErrorText] = useState('');
   const [mobileNav, setMobileNav] = useState(false);
   const [query, setQuery] = useState('');
+  const [introReady, setIntroReady] = useState(false);
+  const [navHistory, setNavHistory] = useState<Section[]>(['Overview']);
+  const [navIndex, setNavIndex] = useState(0);
+  const sectionRef = useRef<Section>(section);
+  const navIndexRef = useRef(navIndex);
+  sectionRef.current = section;
+  navIndexRef.current = navIndex;
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timer = window.setTimeout(() => setIntroReady(true), reducedMotion ? 650 : 2600);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const initialState = { njamaGroup: true, section: 'Overview', index: 0 };
+    window.history.pushState(initialState, '', `${window.location.pathname}#overview`);
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state?.njamaGroup) {
+        const restoredSection = navItems.some(item => item.label === event.state.section)
+          ? (event.state.section as Section)
+          : 'Overview';
+        const restoredIndex = Number.isInteger(event.state.index) ? event.state.index : 0;
+        sectionRef.current = restoredSection;
+        navIndexRef.current = restoredIndex;
+        setSection(restoredSection);
+        setNavIndex(restoredIndex);
+        setMobileNav(false);
+      } else {
+        const currentSection = sectionRef.current;
+        const currentIndex = navIndexRef.current;
+        window.history.pushState(
+          { njamaGroup: true, section: currentSection, index: currentIndex },
+          '',
+          `${window.location.pathname}#${currentSection.toLowerCase()}`
+        );
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (nextSection: Section) => {
+    if (nextSection === section) {
+      setMobileNav(false);
+      return;
+    }
+    const nextHistory = [...navHistory.slice(0, navIndex + 1), nextSection];
+    const nextIndex = nextHistory.length - 1;
+    setNavHistory(nextHistory);
+    navIndexRef.current = nextIndex;
+    sectionRef.current = nextSection;
+    setNavIndex(nextIndex);
+    setSection(nextSection);
+    setMobileNav(false);
+    window.history.pushState(
+      { njamaGroup: true, section: nextSection, index: nextIndex },
+      '',
+      `${window.location.pathname}#${nextSection.toLowerCase()}`
+    );
+  };
 
   useEffect(() => {
     let active = true;
@@ -218,11 +281,23 @@ function App() {
     [query]
   );
 
-  if (loading)
+  if (loading || !introReady)
     return (
-      <main className="boot-screen">
-        <Mark />
-        <p>Securing your group workspace…</p>
+      <main className="boot-screen" aria-label="Opening NJAMA GROUP">
+        <div className="intro-stage">
+          <div className="intro-mark-wrap">
+            <span className="intro-ring intro-ring-one" />
+            <span className="intro-ring intro-ring-two" />
+            <Mark />
+          </div>
+          <div className="intro-wordmark">
+            <strong>NJAMA</strong>
+            <span>GROUP</span>
+          </div>
+          <p>INDEPENDENCE · INTELLIGENCE · INTEGRITY</p>
+          <div className="intro-progress" aria-hidden="true"><span /></div>
+          <small>Preparing your command centre</small>
+        </div>
       </main>
     );
 
@@ -313,10 +388,7 @@ function App() {
                 className={
                   'nav-item ' + (section === item.label ? 'active' : '')
                 }
-                onClick={() => {
-                  setSection(item.label);
-                  setMobileNav(false);
-                }}
+                onClick={() => navigateTo(item.label)}
               >
                 <Icon size={18} />
                 <span>{item.label}</span>
@@ -353,6 +425,28 @@ function App() {
           >
             <Menu size={20} />
           </button>
+          <div className="history-controls" aria-label="Section history">
+            <button
+              className="history-button"
+              onClick={() => window.history.back()}
+              disabled={navIndex === 0}
+              aria-label="Back within NJAMA GROUP"
+              title="Back"
+            >
+              <ArrowLeft size={16} />
+              <span>Back</span>
+            </button>
+            <button
+              className="history-button"
+              onClick={() => window.history.forward()}
+              disabled={navIndex >= navHistory.length - 1}
+              aria-label="Next within NJAMA GROUP"
+              title="Next"
+            >
+              <span>Next</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
           <div className="breadcrumb">
             <span>NJAMA GROUP</span>
             <ChevronRight size={14} />
@@ -416,7 +510,7 @@ function App() {
                   </p>
                   <button
                     className="text-button"
-                    onClick={() => setSection('Businesses')}
+                    onClick={() => navigateTo('Businesses')}
                   >
                     Explore the group structure <ArrowUpRight size={16} />
                   </button>
@@ -456,7 +550,7 @@ function App() {
                 </div>
                 <button
                   className="quiet-button"
-                  onClick={() => setSection('Businesses')}
+                  onClick={() => navigateTo('Businesses')}
                 >
                   View directory <ArrowUpRight size={15} />
                 </button>
@@ -480,7 +574,7 @@ function App() {
                   </p>
                   <button
                     className="text-button"
-                    onClick={() => setSection('Intelligence')}
+                    onClick={() => navigateTo('Intelligence')}
                   >
                     Explore intelligence <ArrowUpRight size={15} />
                   </button>
@@ -507,7 +601,7 @@ function App() {
                   </ul>
                   <button
                     className="quiet-button"
-                    onClick={() => setSection('Governance')}
+                    onClick={() => navigateTo('Governance')}
                   >
                     Review controls <ChevronRight size={15} />
                   </button>
