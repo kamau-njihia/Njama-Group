@@ -204,3 +204,69 @@ The NJAMA GROUP parent app is already present as a separate deployed AppDeploy a
 - No subsidiary databases, records, credentials or user sessions have been connected or copied. No production data migration, database write, PR merge or consequential action was performed.
 - The next technical gate is platform-supported table-catalog provisioning plus persistent group identity, business-scoped roles, consent, integration registry and audit records. AppDeploy's SDK documentation states that missing table catalogs must be provisioned separately before application writes; do not guess an endpoint or attempt to create these catalogs through an application write.
 - First production integration candidate is a PropertyOS read-only operational summary, after target-side service authentication, explicit field/purpose approval and positive/negative permission tests. Atira may contribute only explicitly classified business-owned aggregates; personal finance remains excluded. FORGED remains private and disconnected by default. BMA is limited to approved aggregate learning metrics. Quick Task and Njama Creations require their own specialist applications and contracts before live integration.
+
+
+## 2026-11-18 — coordinated live repair pass
+
+### Live deployment verification
+
+All five existing AppDeploy applications currently report `ready` in their latest QA snapshots:
+
+| Application | AppDeploy snapshot | Live result |
+|---|---:|---|
+| NJAMA GROUP | `1794972964162` | Ready; no frontend/backend errors in QA |
+| Atira | `1794972212104` | Ready; no frontend/backend errors in QA |
+| PropertyOS | `1794972371220` | Ready; no frontend/backend errors in QA |
+| FORGED | `1794972461533` | Ready; no frontend/backend errors in QA |
+| BMA | `1794972913892` | Ready; no frontend/backend errors in QA |
+
+These platform QA results are not a substitute for end-to-end testing on physical Android devices and desktop browsers.
+
+### NJAMA GROUP parent experience
+
+- Improved the existing deployed parent app's opening screen with a branded N emblem, wordmark, restrained orbital treatment and progress animation.
+- The animation now starts after session restoration and completes before the workspace appears; reduced-motion preference is respected.
+- Added in-app Back and Next controls driven by the visited-section history. Browser/Android Back is handled inside the parent app; at the root it restores the app entry rather than navigating away.
+- Improved wide-screen laptop/desktop spacing and responsive controls while retaining the mobile sidebar.
+- Latest parent source was synced to `app/parent-command-centre-v1`; GitHub Actions has no workflow run configured/returned for the latest parent source commit.
+- The parent is still only a command-centre foundation. Persistent group membership, scoped roles, consent, integration registry and append-only audit data remain gated on a supported persistence design and AppDeploy table-catalog provisioning. No subsidiary data is connected.
+
+### Atira
+
+- Deployed orphan-record recovery: local records missing a cloud ID or marked pending/error are re-queued instead of being silently stranded.
+- Deployed a fail-closed 400-page pull guard so an incomplete history pull is not reported as complete.
+- Deployed the staged Oanor NSE quote adapter. The adapter uses an eight-hour in-process best-effort cache and routes advisor market context through the same provider-aware quote path.
+- Oanor credential is still pending in the secure AppDeploy secret form. Until configured, NSE quotes remain explicitly unavailable; no fake prices are substituted. Oanor currently documents 10 free test calls per day and production usage requires a paid plan. No paid plan is authorised.
+- Latest Atira source changes were synced to the recovery branch. GitHub Actions run #61 passed on the synced source.
+- Remaining: durable server-side legacy index/backfill beyond the bounded duplicate scan; complete NSE history/chart/search provider support; business-tracker reconciliation (including the missing KES 3,000 budget contribution) and full device/account sync testing.
+
+### PropertyOS
+
+- Deployed reviewed cursor pagination for organisation module registers, loaded-count labelling, and full editable register fields with organisation and role checks plus optimistic concurrency.
+- Deployed the reviewed report fallback: if the AI narrative provider fails, the user notes and selected register references are retained in a draft marked for manual verification.
+- Existing preventive maintenance work-order IDs remain deterministic and the earlier `workorders`/ `work-orders` mismatch remains corrected.
+- Remaining large-data work: the daily automation, organisation overview, tenant portal lookup, accounting reconciliation/matching and report source retrieval still contain first-page or bounded-read paths. These must be converted to explicit cursor pagination or fail-closed completeness checks before claiming portfolio-scale correctness.
+- Existing tenant payment rule remains: recognise and record first, then require authorised approval before crediting an invoice or sending a payment confirmation.
+
+### FORGED
+
+- Deployed cursor metadata for the records endpoint and a fail-closed guard: the Partner will not describe the first 100 records as a complete accountability history.
+- Existing invalid-refresh-token recovery, Android/browser Back handling and ordinary-text selection suppression remain in the live app.
+- GitHub Actions run #36 passed on the synced backend and tests.
+- Remaining: a durable summary/index for long accountability histories; frontend pagination beyond the first 100 records; Coach context still uses a bounded recent subset; verify large-history, export/restore, offline and multi-device cases.
+
+### Business Mastery Academy (BMA)
+
+- Deployed the inline vector logo repair, so the sidebar no longer depends on the failed external logo request.
+- Corrected strict TypeScript source issues found during GitHub CI: icon/type name collision, unsupported selection event, lesson-count versus lesson-ID array mismatch, and untyped mixed metric tuples.
+- Latest AppDeploy snapshot reports ready, with no frontend/backend errors in QA.
+- GitHub Actions run #110 and #112 failed on earlier commits because of the TypeScript errors above; those source errors have since been corrected and synced, but a passing CI run for the newest head has not yet been returned. Do not label BMA CI as passed.
+- Learner progress remains browser-local. The authenticated cloud progress candidate is still not live; it depends on AppDeploy's supported provisioning process for `learner_progress` and `learner_progress_receipts`, followed by account UX, safe local migration, offline queue and multi-device conflict tests.
+- Certificate issuance and public verification remain previews, not live credentials. Anonymous AI preview routes still need a durable rate-limit/quota design. Device, offline, cross-account and curriculum-resource delivery testing remain outstanding.
+- User previously emailed AppDeploy support about table provisioning. Do not guess an undocumented provisioning endpoint. A support reply is needed before enabling the candidate database routes.
+
+### Cross-app release boundaries
+
+- AppDeploy source snapshots were deployed independently; no draft GitHub PR was merged.
+- Existing account identities and data stores were preserved. No database reset, destructive migration, bulk data copy, shared credentials, cross-app database access or subsidiary live data connection was performed.
+- NJAMA GROUP integration remains read-only by default and disabled until target-side authentication, owner-approved purpose/fields, consent, revocation and audit checks are implemented and tested.
