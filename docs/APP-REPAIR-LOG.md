@@ -283,3 +283,13 @@ These platform QA results are not a substitute for end-to-end testing on physica
 - **BMA GitHub:** strict TypeScript issues were corrected and synced. GitHub Actions run #116 passed (type-check, lesson tests, service-worker syntax and production build). The live BMA app still has browser-local learner progress; the authenticated cloud progress candidate remains disabled pending supported table provisioning and frontend account/migration work.
 - **AppDeploy quota:** the platform explicitly returned `CREDITS_USAGE_LIMIT_REACHED` for the FORGED cleanup deployment. The response did not identify whether the daily, weekly or monthly limit was responsible. No further live deployments should be attempted until the credits dashboard confirms the relevant limit has reset or changed.
 - **No destructive or cross-app actions:** no PR was merged; no live user records were reset, migrated or copied; no subsidiary databases or credentials were connected to NJAMA GROUP.
+
+
+## 2026-11-18 — CI completion correction
+
+- GitHub Actions **FORGED run #42 passed** after removing the five unused imports from the recovery branch. This validates backend syntax, strict TypeScript and the production build on the current branch head. The equivalent import-only cleanup could not be deployed to AppDeploy because the platform usage limit was active.
+- GitHub Actions **BMA run #116 passed** after the dashboard type fixes were synced. Type-check, lesson validation tests, service-worker syntax and production build all succeeded.
+- GitHub Actions **PropertyOS run #70 passed** after the register and tenant-lookup changes were synced.
+- GitHub Actions **Atira run #61 passed** after sync recovery and Oanor adapter source were synced.
+- NJAMA GROUP has no workflow run configured/returned for its current source branch; its current AppDeploy QA snapshot remains ready.
+- These CI results do not override the remaining product-level gates documented above: BMA learner cloud sync and certificates, PropertyOS other large-data paths, FORGED long-history summary/index, and Atira Oanor credential plus legacy index/history support.
