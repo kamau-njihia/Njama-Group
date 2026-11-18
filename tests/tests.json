@@ -1,6 +1,6 @@
 [
   {
-    "name": "Restore a signed-in group workspace",
+    "name": "Restore the secure group workspace",
     "sanity": true,
     "viewport": "desktop",
     "covers": [
@@ -8,56 +8,79 @@
       "protected group workspace",
       "authenticated identity"
     ],
-    "description": "Verifies an authenticated user can restore their session and reach the private NJAMA GROUP command centre.",
+    "description": "Verifies a signed-in user can restore their session and reach the private NJAMA GROUP command centre.",
     "steps": [
       "Sign in to NJAMA GROUP using the test account",
-      "Wait for the group command centre to load",
+      "Wait for the opening sequence and workspace to load",
       "Confirm the signed-in workspace and navigation are visible"
     ],
-    "expected": "The authenticated user sees the NJAMA GROUP command centre and no sign-in prompt."
+    "expected": "The authenticated user reaches the group command centre without a sign-in loop or blank screen."
   },
   {
-    "name": "Open an existing specialist application",
+    "name": "Navigate sections with Back and Next",
     "viewport": "desktop",
     "covers": [
-      "subsidiary directory",
-      "external specialist application link",
-      "independent app boundary"
+      "in-app Back control",
+      "in-app Next control",
+      "section history",
+      "browser history handling"
     ],
-    "description": "Verifies the businesses directory exposes the existing PropertyOS application as a separate destination.",
+    "description": "Verifies navigation controls move between visited sections without leaving NJAMA GROUP.",
     "steps": [
-      "Open Businesses from the group navigation",
-      "Find PropertyOS in the directory",
-      "Open the PropertyOS app link"
+      "Open Businesses",
+      "Open Governance",
+      "Use Back and confirm Businesses appears",
+      "Use Next and confirm Governance appears"
     ],
-    "expected": "PropertyOS opens as its own application in a separate browser tab; NJAMA GROUP remains open."
+    "expected": "Back and Next move through visited NJAMA GROUP sections; neither control exits the app."
   },
   {
-    "name": "Keep unconnected business modules clearly separated",
+    "name": "Keep Android and browser Back inside the app",
     "viewport": "mobile",
     "covers": [
-      "mobile navigation",
-      "unconnected module state",
-      "no fabricated live data"
+      "mobile browser Back handling",
+      "in-app navigation history",
+      "mobile navigation"
     ],
-    "description": "Verifies planned businesses are shown as not connected and do not display fabricated operational records.",
+    "description": "Verifies the device or browser Back action returns to the previous group section rather than leaving the parent app.",
     "steps": [
       "Open NJAMA GROUP on a mobile viewport",
-      "Open Businesses from the navigation",
-      "Find Quick Task and Njama Creations"
+      "Visit Businesses and then Intelligence",
+      "Use the device or browser Back action"
     ],
-    "expected": "Both businesses are shown as not linked yet, with no fabricated transactions, users or activity."
+    "expected": "The previous NJAMA GROUP section is displayed and the app remains open."
   },
   {
-    "name": "Sign out of the group workspace",
-    "viewport": "desktop",
-    "covers": ["sign-out", "protected workspace access"],
-    "description": "Verifies the user can end the authenticated session and return to the secure sign-in screen.",
-    "steps": [
-      "Sign in to NJAMA GROUP",
-      "Use the profile sign-out control",
-      "Confirm the sign-in screen is displayed"
+    "name": "Show the branded opening sequence",
+    "viewport": "mobile",
+    "covers": [
+      "NJAMA GROUP opening animation",
+      "reduced-motion accessibility",
+      "session restoration during intro"
     ],
-    "expected": "The private workspace is no longer displayed and the secure sign-in screen appears."
+    "description": "Verifies the branded opening screen appears before the authenticated workspace and respects reduced-motion preferences.",
+    "steps": [
+      "Open or reload NJAMA GROUP",
+      "Observe the emblem, wordmark and progress animation",
+      "Wait for the workspace to appear"
+    ],
+    "expected": "A restrained NJAMA GROUP opening sequence appears, then the app continues to sign-in or the restored workspace."
+  },
+  {
+    "name": "Use the command centre on a laptop or desktop",
+    "viewport": "desktop",
+    "covers": [
+      "desktop layout",
+      "wide-screen navigation",
+      "responsive business directory",
+      "desktop Back and Next controls"
+    ],
+    "description": "Verifies the parent command centre is usable at laptop and desktop widths.",
+    "steps": [
+      "Open NJAMA GROUP at a desktop viewport",
+      "Navigate between Overview and Businesses",
+      "Check that the sidebar, content, cards and history controls remain visible and usable"
+    ],
+    "expected": "The desktop layout uses the available width cleanly, with working sidebar and Back/Next controls and no horizontal overflow."
   }
 ]
