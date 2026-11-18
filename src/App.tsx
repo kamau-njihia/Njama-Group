@@ -156,10 +156,11 @@ function App() {
   navIndexRef.current = navIndex;
 
   useEffect(() => {
+    if (loading) return;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const timer = window.setTimeout(() => setIntroReady(true), reducedMotion ? 650 : 2600);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     const initialState = { njamaGroup: true, section: 'Overview', index: 0 };
