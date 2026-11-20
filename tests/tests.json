@@ -1,0 +1,125 @@
+[
+  {
+    "name": "Restore the authenticated NJAMA GROUP workspace",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "AppDeploy authentication restoration",
+      "owner role restoration",
+      "protected group workspace",
+      "branded opening sequence"
+    ],
+    "description": "Verifies the existing authenticated owner reaches the redesigned group command centre without a sign-in loop.",
+    "steps": [
+      "Sign in with the existing NJAMA GROUP owner account",
+      "Wait for session restoration and the opening sequence",
+      "Confirm the group workspace and navigation are visible"
+    ],
+    "expected": "The existing owner reaches NJAMA GROUP with the expected role and no blank screen."
+  },
+  {
+    "name": "Navigate all group areas with Back and Next",
+    "viewport": "desktop",
+    "covers": [
+      "expanded group navigation",
+      "in-app Back control",
+      "in-app Next control",
+      "browser history containment"
+    ],
+    "description": "Verifies the new group areas remain within the parent application and history controls work.",
+    "steps": [
+      "Open Businesses",
+      "Open Finance",
+      "Open NJAMA INTELLIGENCE",
+      "Use Back and confirm Finance appears",
+      "Use Next and confirm NJAMA INTELLIGENCE appears"
+    ],
+    "expected": "Back and Next restore the visited sections and do not leave NJAMA GROUP."
+  },
+  {
+    "name": "Protect unprovisioned business and finance records",
+    "viewport": "desktop",
+    "covers": [
+      "database catalog readiness check",
+      "no fake financial balances",
+      "no browser-only fallback",
+      "write guard before database provisioning"
+    ],
+    "description": "Verifies that when persistent table catalogs are unavailable, business and financial forms are visibly gated and no fabricated records are displayed.",
+    "steps": [
+      "Sign in as the group owner",
+      "Open Businesses and inspect the data-provisioning notice",
+      "Open Finance and inspect the transaction form",
+      "Confirm live record submission is disabled while catalogs are unavailable"
+    ],
+    "expected": "The app clearly explains the provisioning requirement, does not invent balances or records, and blocks writes until the database is ready."
+  },
+  {
+    "name": "Use NJAMA INTELLIGENCE without false live-data claims",
+    "viewport": "desktop",
+    "covers": [
+      "server-side NJAMA INTELLIGENCE request",
+      "group-specific intelligence guidance",
+      "live-data limitation disclosure"
+    ],
+    "description": "Verifies the assistant returns useful group-specific guidance while disclosing that subsidiary data connections are not active.",
+    "steps": [
+      "Open NJAMA INTELLIGENCE",
+      "Ask for three priorities for building the group",
+      "Review the returned response"
+    ],
+    "expected": "A useful response appears and does not claim access to live subsidiary records or execution authority."
+  },
+  {
+    "name": "Keep the command centre usable on mobile",
+    "viewport": "mobile",
+    "covers": [
+      "mobile navigation",
+      "responsive dashboard cards",
+      "responsive forms",
+      "mobile history controls"
+    ],
+    "description": "Verifies the redesigned group command centre remains usable at mobile width.",
+    "steps": [
+      "Open NJAMA GROUP on a mobile viewport",
+      "Open the navigation drawer",
+      "Navigate to Departments and Finance",
+      "Use the in-app Back control"
+    ],
+    "expected": "Navigation, cards, forms and history controls remain usable without horizontal overflow."
+  },
+  {
+    "name": "Show the founding portfolio and group departments",
+    "viewport": "desktop",
+    "covers": [
+      "three founding subsidiaries",
+      "seven group departments",
+      "separate existing application directory"
+    ],
+    "description": "Verifies the agreed founding businesses and group functions are represented distinctly from existing standalone apps.",
+    "steps": [
+      "Open Businesses and inspect the founding portfolio",
+      "Open Departments and inspect the seven shared functions",
+      "Open Technology and inspect the separate existing application links"
+    ],
+    "expected": "Quick Task Errands & Cleaning Services, Njama Creations and Njama Property Managers appear as the founding businesses; existing apps are shown as separate systems without shared data."
+  },
+  {
+    "name": "Enforce team invitation and approval authority",
+    "viewport": "desktop",
+    "covers": [
+      "platform-managed member roles",
+      "owner/admin-only invitations",
+      "owner/admin-only approval decisions",
+      "role and business scope boundaries"
+    ],
+    "description": "Verifies team access and approval controls are role-aware and enforced by backend routes.",
+    "steps": [
+      "Sign in as the group owner",
+      "Open People and inspect the member invitation form",
+      "Open Governance and inspect the approval register",
+      "Confirm backend authorization is required for invitation and decision actions"
+    ],
+    "expected": "Only authorized owner or admin roles can invite members or decide approvals; business scope is enforced server-side."
+  }
+]
