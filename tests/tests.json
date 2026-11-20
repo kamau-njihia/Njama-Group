@@ -1,86 +1,125 @@
 [
   {
-    "name": "Restore the secure group workspace",
+    "name": "Restore the authenticated NJAMA GROUP workspace",
     "sanity": true,
     "viewport": "desktop",
     "covers": [
       "AppDeploy authentication restoration",
+      "owner role restoration",
       "protected group workspace",
-      "authenticated identity"
+      "branded opening sequence"
     ],
-    "description": "Verifies a signed-in user can restore their session and reach the private NJAMA GROUP command centre.",
+    "description": "Verifies the existing authenticated owner reaches the redesigned group command centre without a sign-in loop.",
     "steps": [
-      "Sign in to NJAMA GROUP using the test account",
-      "Wait for the opening sequence and workspace to load",
-      "Confirm the signed-in workspace and navigation are visible"
+      "Sign in with the existing NJAMA GROUP owner account",
+      "Wait for session restoration and the opening sequence",
+      "Confirm the group workspace and navigation are visible"
     ],
-    "expected": "The authenticated user reaches the group command centre without a sign-in loop or blank screen."
+    "expected": "The existing owner reaches NJAMA GROUP with the expected role and no blank screen."
   },
   {
-    "name": "Navigate sections with Back and Next",
+    "name": "Navigate all group areas with Back and Next",
     "viewport": "desktop",
     "covers": [
+      "expanded group navigation",
       "in-app Back control",
       "in-app Next control",
-      "section history",
-      "browser history handling"
+      "browser history containment"
     ],
-    "description": "Verifies navigation controls move between visited sections without leaving NJAMA GROUP.",
+    "description": "Verifies the new group areas remain within the parent application and history controls work.",
     "steps": [
       "Open Businesses",
-      "Open Governance",
-      "Use Back and confirm Businesses appears",
-      "Use Next and confirm Governance appears"
+      "Open Finance",
+      "Open NJAMA INTELLIGENCE",
+      "Use Back and confirm Finance appears",
+      "Use Next and confirm NJAMA INTELLIGENCE appears"
     ],
-    "expected": "Back and Next move through visited NJAMA GROUP sections; neither control exits the app."
+    "expected": "Back and Next restore the visited sections and do not leave NJAMA GROUP."
   },
   {
-    "name": "Keep Android and browser Back inside the app",
-    "viewport": "mobile",
-    "covers": [
-      "mobile browser Back handling",
-      "in-app navigation history",
-      "mobile navigation"
-    ],
-    "description": "Verifies the device or browser Back action returns to the previous group section rather than leaving the parent app.",
-    "steps": [
-      "Open NJAMA GROUP on a mobile viewport",
-      "Visit Businesses and then Intelligence",
-      "Use the device or browser Back action"
-    ],
-    "expected": "The previous NJAMA GROUP section is displayed and the app remains open."
-  },
-  {
-    "name": "Show the branded opening sequence",
-    "viewport": "mobile",
-    "covers": [
-      "NJAMA GROUP opening animation",
-      "reduced-motion accessibility",
-      "session restoration during intro"
-    ],
-    "description": "Verifies the branded opening screen appears before the authenticated workspace and respects reduced-motion preferences.",
-    "steps": [
-      "Open or reload NJAMA GROUP",
-      "Observe the emblem, wordmark and progress animation",
-      "Wait for the workspace to appear"
-    ],
-    "expected": "A restrained NJAMA GROUP opening sequence appears, then the app continues to sign-in or the restored workspace."
-  },
-  {
-    "name": "Use the command centre on a laptop or desktop",
+    "name": "Protect unprovisioned business and finance records",
     "viewport": "desktop",
     "covers": [
-      "desktop layout",
-      "wide-screen navigation",
-      "responsive business directory",
-      "desktop Back and Next controls"
+      "database catalog readiness check",
+      "no fake financial balances",
+      "no browser-only fallback",
+      "write guard before database provisioning"
     ],
-    "description": "Verifies the parent command centre is usable at laptop and desktop widths.",
+    "description": "Verifies that when persistent table catalogs are unavailable, business and financial forms are visibly gated and no fabricated records are displayed.",
     "steps": [
-      "Open NJAMA GROUP at a desktop viewport",
-      "Navigate between Overview and Businesses",
-      "Check that the sidebar, content, cards and history controls remain visible and usable"
+      "Sign in as the group owner",
+      "Open Businesses and inspect the data-provisioning notice",
+      "Open Finance and inspect the transaction form",
+      "Confirm live record submission is disabled while catalogs are unavailable"
     ],
-    "expected": "The desktop layout uses the available width cleanly, with working sidebar and Back/Next controls and no horizontal overflow."
+    "expected": "The app clearly explains the provisioning requirement, does not invent balances or records, and blocks writes until the database is ready."
+  },
+  {
+    "name": "Use NJAMA INTELLIGENCE without false live-data claims",
+    "viewport": "desktop",
+    "covers": [
+      "server-side NJAMA INTELLIGENCE request",
+      "group-specific intelligence guidance",
+      "live-data limitation disclosure"
+    ],
+    "description": "Verifies the assistant returns useful group-specific guidance while disclosing that subsidiary data connections are not active.",
+    "steps": [
+      "Open NJAMA INTELLIGENCE",
+      "Ask for three priorities for building the group",
+      "Review the returned response"
+    ],
+    "expected": "A useful response appears and does not claim access to live subsidiary records or execution authority."
+  },
+  {
+    "name": "Keep the command centre usable on mobile",
+    "viewport": "mobile",
+    "covers": [
+      "mobile navigation",
+      "responsive dashboard cards",
+      "responsive forms",
+      "mobile history controls"
+    ],
+    "description": "Verifies the redesigned group command centre remains usable at mobile width.",
+    "steps": [
+      "Open NJAMA GROUP on a mobile viewport",
+      "Open the navigation drawer",
+      "Navigate to Departments and Finance",
+      "Use the in-app Back control"
+    ],
+    "expected": "Navigation, cards, forms and history controls remain usable without horizontal overflow."
+  },
+  {
+    "name": "Show the founding portfolio and group departments",
+    "viewport": "desktop",
+    "covers": [
+      "three founding subsidiaries",
+      "seven group departments",
+      "separate existing application directory"
+    ],
+    "description": "Verifies the agreed founding businesses and group functions are represented distinctly from existing standalone apps.",
+    "steps": [
+      "Open Businesses and inspect the founding portfolio",
+      "Open Departments and inspect the seven shared functions",
+      "Open Technology and inspect the separate existing application links"
+    ],
+    "expected": "Quick Task Errands & Cleaning Services, Njama Creations and Njama Property Managers appear as the founding businesses; existing apps are shown as separate systems without shared data."
+  },
+  {
+    "name": "Enforce team invitation and approval authority",
+    "viewport": "desktop",
+    "covers": [
+      "platform-managed member roles",
+      "owner/admin-only invitations",
+      "owner/admin-only approval decisions",
+      "role and business scope boundaries"
+    ],
+    "description": "Verifies team access and approval controls are role-aware and enforced by backend routes.",
+    "steps": [
+      "Sign in as the group owner",
+      "Open People and inspect the member invitation form",
+      "Open Governance and inspect the approval register",
+      "Confirm backend authorization is required for invitation and decision actions"
+    ],
+    "expected": "Only authorized owner or admin roles can invite members or decide approvals; business scope is enforced server-side."
   }
 ]
